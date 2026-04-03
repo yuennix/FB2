@@ -1593,7 +1593,7 @@ def get_device_info():
         # Pesent FB Lite (2025-2026) - new versions
         '503.0.0.0.3', '502.0.0.5.105',
         '503.0.0.10.107', '505.0.0.8.102'
-
+    ]
     device = {
         'model': random.choice(device_models),
         'android': random.choice(android_versions),
