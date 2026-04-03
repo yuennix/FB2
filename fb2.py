@@ -1590,7 +1590,9 @@ def get_device_info():
         # Recent FB Lite (2023-2024) - mix of versions
         '388.0.0.4.115', '389.0.0.6.117', '390.0.0.7.119', '391.0.0.10.119', '392.0.0.9.118',
         '393.0.0.8.116', '394.0.0.5.113', '395.0.0.6.110', '396.0.0.4.107', '397.0.0.3.105'
-    ]
+        # Pesent FB Lite (2025-2026) - new versions
+        '503.0.0.0.3', '502.0.0.5.105',
+        '503.0.0.10.107', '505.0.0.8.102'
 
     device = {
         'model': random.choice(device_models),
@@ -2540,7 +2542,7 @@ while True:
                 break
 
             use_custom_domain = True
-            if email_choice == '1' or email_choice not in ['1', '2', '3', '4']:
+            if email_choice == '1' or email_choice not in ['1', '2', '3', '4', '5']:
                 email_choice = '1'
                 custom_domain = 'weyn.store'
             elif email_choice == '2':
@@ -2549,7 +2551,9 @@ while True:
                 custom_domain = 'harakirimail.com'
             elif email_choice == '4':
                 custom_domain = 'pleasenospam.email'
-
+            elif email_choice == '5':
+                custom_domain = 'lovesiobhan.shop'
+                
             # Password Selection with Back Option
             while True:
                 clear_screen()
@@ -2663,8 +2667,8 @@ while True:
                 # Configure connection pooling and retry strategy
                 from requests.adapters import HTTPAdapter
                 adapter = HTTPAdapter(
-                    pool_connections=10,
-                    pool_maxsize=20,
+                    pool_connections=5,
+                    pool_maxsize=5,
                     max_retries=5,
                     pool_block=False
                 )
@@ -2694,15 +2698,15 @@ while True:
                         "wtsid": "rdr_0t3qOXoIHbMS6isLw",
                         "refsrc": "deprecated"
                     },
-                    timeout=10,
+                    timeout=5,
                     verify=_SSL_VERIFY
                 )
 
                 # Form reading delay
                 time.sleep(random.uniform(0.05, 0.1) if is_termux() else random.uniform(0.2, 0.4))
 
-                # FIXED: Increased timeout to 30s with proper SSL certificate verification
-                mts = ses.get("https://x.facebook.com", timeout=30, verify=_SSL_VERIFY).text
+                # FIXED: Increased timeout to 10s with proper SSL certificate verification
+                mts = ses.get("https://x.facebook.com", timeout=10, verify=_SSL_VERIFY).text
                 m_ts_match = re.search(r'name="m_ts" value="(.*?)"', str(mts))
                 m_ts = m_ts_match.group(1) if m_ts_match else ""
 
@@ -3505,7 +3509,7 @@ while True:
                     break  # CRITICAL: Exit retry loop regardless of checkpoint or success
                 else:
                     # Retry with different email if not last attempt
-                    if attempt < 4:
+                    if attempt < 3:
                         time.sleep(random.uniform(0.3, 0.7))  # Faster retry
                         continue
                     else:
@@ -3516,8 +3520,8 @@ while True:
                     requests.exceptions.ConnectionError,
                     requests.exceptions.HTTPError) as e:
                 # Network/timeout errors - retry with smart exponential backoff
-                if attempt < 4:
-                    retry_delay = random.uniform(0.5, 1.0) * (attempt + 1) if is_termux() else random.uniform(2.0, 4.0) * (attempt + 1)
+                if attempt < 3:
+                    retry_delay = random.uniform(0.5, 1.0) * (attempt + 1) if is_termux() else random.uniform(1.0, 2.0) * (attempt + 1)
                     print(f'{Colors.YELLOW}⏳ Connection issue (attempt {attempt+1}/5) - retrying in {retry_delay:.1f}s... ({type(e).__name__}){Colors.RESET}')
                     time.sleep(retry_delay)
                     continue  # Retry
@@ -3545,19 +3549,19 @@ while True:
                 base_delay = random.uniform(0.2, 0.5)
             else:
                 if use_custom_domain:
-                    base_delay = random.uniform(1.5, 2.5)
+                    base_delay = random.uniform(0.3, 0.5)
                 else:
                     base_delay = random.uniform(1.0, 2.0)
 
                 # Pattern breaking (non-Termux only)
-                rand_pattern = random.randint(1, 20)
-                if rand_pattern <= 2:
+                rand_pattern = random.randint(1, 2)
+                if rand_pattern <= 10:
                     base_delay += random.uniform(1.0, 2.0)
-                elif rand_pattern == 20:
-                    base_delay += random.uniform(3.0, 5.0)
+                elif rand_pattern == 10:
+                    base_delay += random.uniform(0.3, 0.5)
 
                 if (i + 1) % 5 == 0:
-                    base_delay += random.uniform(1.5, 3.0)
+                    base_delay += random.uniform(0.3, 0.5)
 
                 base_delay = max(base_delay, 0.8)
 
